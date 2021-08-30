@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
+<mapper namespace="tracker">
+
+	<select id="trackerListCount" resultType="int">
+		select count(*) from t_tracker
+	</select>
+	
+	<select id="select" resultType="com.example.spring03.tracker.dto.trackerDTO">
+		SELECT *
+		FROM
+		    (SELECT    @rn := @rn +1 AS tNum
+			,tracker_idx
+				,t_group_id
+				,tracker_id
+				,tracker_name
+				,tracker_model
+				,tracker_username
+				,tracker_capacity
+				,tracker_builder
+				,tracker_manager
+				,tracker_owner
+				,tracker_phone
+				,tracker_reg_date
+				
+		    FROM    (
+			    SELECT
+				*
+				,(SELECT t_group_name FROM t_group WHERE t_group_id = t_tracker.t_group_id) AS 't_group_name'
+			    FROM t_tracker
+			    
+			    ORDER BY tracker_idx DESC
+				)sa
+				,(SELECT @rn := 0) R
+		    ) sq
+		WHERE tNum BETWEEN ${startRow} AND ${endRow}
+	</select>
+	<select id="select_190916" resultType="com.example.spring03.tracker.dto.trackerDTO">
+		SELECT sq.*,t_group_name
+		FROM
+		    (SELECT    @rn := @rn +1 AS tNum
+			,tracker_idx
+				,t_group_id
+				,tracker_id
+				,tracker_name
+				,tracker_model
+				,tracker_username
+				,tracker_capacity
+				,tracker_builder
+				,tracker_manager
+				,tracker_owner
+				,tracker_phone
+				,tracker_reg_date
+				
+		    FROM    (
+			    SELECT
+				*
+				,(SELECT t_group_name FROM t_group WHERE t_group_id = t_tracker.t_group_id) AS 't_group_name'
+			    FROM t_tracker
+			    
+			    ORDER BY tracker_idx DESC
+				)sa
+				,(SELECT @rn := 0) R
+		    ) sq
+		JOIN
+		(SELECT t_group_id, t_group_name FROM t_group) as b
+		ON sq.t_group_id = b.t_group_id 
+		WHERE tNum BETWEEN ${startRow} AND ${endRow}
+	</select>
+	
+	
+	<select id="view"
+		resultType="com.example.spring03.tracker.dto.trackerDTO">
+select
+		tracker_idx,
+		t_group_id,
+		tracker_id,
+		tracker_model,
+		tracker_capacity,
+		tracker_builder,
+		tracker_manager,
+		tracker_owner,
+		tracker_phone,
+		history,
+		tracker_reg_date
+		from t_tracker
+		where tracker_idx = #{tracker_idx}
+	</select>
+	
+	<select id="view_190916"
+		resultType="com.example.spring03.tracker.dto.trackerDTO">
+SELECT a.*, t_group_name FROM 
+(select
+		tracker_idx,
+		t_group_id,
+		tracker_id,
+		tracker_model,
+		tracker_capacity,
+		tracker_builder,
+		tracker_manager,
+		tracker_owner,
+		tracker_phone,
+		tracker_username,
+		history,
+		tracker_reg_date
+		from t_tracker
+		where tracker_idx = #{tracker_idx}) as a 
+JOIN 
+(SELECT t_group_id, t_group_name FROM t_group) as b
+ON a.t_group_id = b.t_group_id;
+	</select>
+
+	<delete id="delete" parameterType="int" statementType="PREPARED">
+		delete from t_tracker
+		where tracker_idx = #{tracker_idx}
+	</delete>
+	<update id="update"> 
+			update t_tracker
+		set
+		tracker_name 	     = #{tracker_name},                
+		tracker_model        = #{tracker_model},     
+		tracker_capacity     = #{tracker_capacity},  
+		tracker_builder      = #{tracker_builder},   
+		tracker_manager      = #{tracker_manager},   
+		tracker_owner        = #{tracker_owner},     
+		tracker_phone        = #{tracker_phone},     
+		history              = #{history}     
+	where tracker_id 		 = #{tracker_id} 
+	</update>
+	<update id="update_190916"> 
+			update t_tracker
+		set
+		tracker_name 	     = #{tracker_name},                
+		tracker_model        = #{tracker_model},     
+		tracker_capacity     = #{tracker_capacity},  
+		tracker_builder      = #{tracker_builder},   
+		tracker_manager      = #{tracker_manager},   
+		tracker_owner        = #{tracker_owner},     
+		tracker_phone        = #{tracker_phone},
+		tracker_username	 = #{tracker_username},     
+		history              = #{history}     
+	where tracker_idx 		 = #{tracker_idx} 
+	</update>
+
+
+	<insert id="tracker_insert">
+	insert into t_tracker(
+		t_group_id,
+		tracker_id,
+		tracker_model,
+		tracker_capacity,
+		tracker_builder,
+		tracker_manager,
+		tracker_owner,
+		tracker_phone,
+		history
+		)
+		values(
+		#{t_group_id},
+		#{tracker_id},
+		#{tracker_model},
+		#{tracker_capacity},
+		#{tracker_builder},
+		#{tracker_manager},
+		#{tracker_owner},
+		#{tracker_phone},
+		#{history}
+		)
+	</insert>
+	
+	<insert id="tracker_insert_190920">
+	insert into t_tracker(
+		t_group_id,
+		tracker_id,
+		tracker_model,
+		tracker_capacity,
+		tracker_builder,
+		tracker_manager,
+		tracker_owner,
+		tracker_phone,
+		tracker_username,
+		history
+		)
+		values(
+		#{t_group_id},
+		#{tracker_id},
+		#{tracker_model},
+		#{tracker_capacity},
+		#{tracker_builder},
+		#{tracker_manager},
+		#{tracker_owner},
+		#{tracker_phone},
+		#{tracker_username},
+		#{history}
+		)
+	</insert>
+
+	<select id="tracker_group_choice"
+		resultType="com.example.spring03.tracker.dto.trackerDTO">
+		select t_group_id, t_group_name from t_group
+	</select>
+
+	<select id="t_tracker"
+		resultType="com.example.spring03.tracker.dto.trackerDTO">
+		select tracker_id from t_tracker
+		where tracker_idx =#{tracker_idx}
+	</select>
+
+
+	<!-- 아이디 중복 체크 -->
+	<select id="Tracker_Idcheck" parameterType="com.example.spring03.tracker.dto.trackerDTO" resultType="int">
+		<![CDATA[
+		select count(tracker_id)
+		from t_tracker 
+		where	Tracker_id = #{tracker_id}
+		and		t_group_id = #{t_group_id}
+		]]>
+	</select>
+
+
+	<!-- 인버터 리스트 뿌리기 -->
+	<select id="Add_Inverter"
+		resultType="com.example.spring03.tracker.dto.trackerDTO">
+		select inverter_idx, inverter_id from inverter
+		where t_group_id = #{t_group_id}
+	</select>
+	<!-- 일반 유저 리스트  -->
+	
+	<select id="User_Tracker_List"	resultType="com.example.spring03.tracker.dto.trackerDTO">
+	select
+a.tracker_idx,
+a.tracker_id,
+a.t_group_id,
+a.tracker_name,
+b.t_group_name,
+a.tracker_model,
+a.tracker_capacity,
+a.tracker_manager,
+a.tracker_phone,
+a.tracker_reg_date
+from t_tracker as a
+left join 
+t_group as b
+on
+a.t_group_id = b.t_group_id
+where a.t_group_id = #{userID};
+	</select>
+	
+	<select id="User_TrackerListCount"	resultType="int">
+		SELECT COUNT(*) FROM 
+		(SELECT * FROM t_tracker) as a
+		JOIN 
+		(SELECT * FROM user WHERE user_id = #{userID}) as b
+		ON a.t_group_id = b.group_id 
+	</select>
+	
+	<select id="User_TrackerListCount_191010" resultType="int">
+		SELECT COUNT(*) FROM 
+		(SELECT * FROM t_tracker) as a
+		JOIN 
+		(SELECT * FROM user_t_g WHERE user_id = #{userID} LIMIT 1) as b
+		ON a.t_group_id = b.t_group_id 
+	</select>
+	
+	<select id="User_Tracker_List_190919"	resultType="com.example.spring03.tracker.dto.trackerDTO">
+	select a.tracker_idx, c.t_group_name, a.tracker_id, a.tracker_model, a.tracker_capacity , a.tracker_username, a.tracker_phone, a.tracker_reg_date FROM
+	(SELECT * FROM t_tracker) as a
+	JOIN 
+	(SELECT user_id, group_id FROM user WHERE user_id = #{userID}) as b 
+	JOIN
+	(SELECT t_group_id, t_group_name FROM t_group) as c
+	on a.t_group_id = b.group_id AND c.t_group_id = b.group_id;
+	</select>
+	
+	<select id="User_Tracker_List_191010"	resultType="com.example.spring03.tracker.dto.trackerDTO">
+	select a.tracker_idx, c.t_group_name, a.tracker_id, a.tracker_model, a.tracker_capacity , a.tracker_username, a.tracker_phone, a.tracker_reg_date FROM
+	(SELECT * FROM t_tracker) as a
+	JOIN 
+	(SELECT user_id, t_group_id FROM user_t_g WHERE user_id = #{userID} LIMIT 1) as b 
+	JOIN
+	(SELECT t_group_id, t_group_name FROM t_group) as c
+	on a.t_group_id = b.t_group_id AND c.t_group_id = b.t_group_id;
+	</select>
+
+</mapper>

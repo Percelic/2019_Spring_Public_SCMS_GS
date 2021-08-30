@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
+<mapper namespace="inverter">
+
+	<select id="inverterListCount" resultType="int">
+		select count(*) from inverter
+	</select>
+	
+	<select id="User_inverterListCount" resultType="int">
+		SELECT COUNT(*) FROM 
+		(SELECT * FROM inverter) as a
+		JOIN 
+		(SELECT * FROM user WHERE user_id = #{userID}) as b
+		ON a.t_group_id = b.group_id 
+	</select>
+	
+	<select id="User_inverterListCount_191010" resultType="int">
+		SELECT COUNT(*) FROM 
+		(SELECT * FROM inverter) as a
+		JOIN 
+		(SELECT * FROM user_t_g WHERE user_id = #{userID} LIMIT 1) as b
+		ON a.t_group_id = b.t_group_id 
+	</select>
+	
+	<!-- 인버터 리스트 -->
+	<select id="inverterList"
+		resultType="com.example.spring03.inverter.dto.inverterDTO">
+		
+		SELECT sq.*, t_group_name as 'inverter_group_name'
+		FROM
+		    (SELECT    @rn := @rn +1 AS tNum
+			,inverter_idx
+			,inverter_id
+			,t_group_id
+			,inverter_name
+			,inverter_username
+			,inverter_builder
+			,inverter_owner
+			,inverter_model
+			,inverter_capacity
+			,inverter_manager
+			,inverter_phone
+			,inverter_reg_date
+				
+		    FROM    (
+			    SELECT
+				*
+				,(SELECT t_group_name FROM t_group WHERE t_group_id = inverter.t_group_id) AS 'inverter_group_name' 
+			    FROM inverter
+			    
+			    ORDER BY inverter_idx DESC
+				)sa
+				,(SELECT @rn := 0) R
+		    ) sq
+		JOIN 
+		(SELECT t_group_id, t_group_name FROM t_group) as b
+		ON 
+		sq.t_group_id = b.t_group_id
+		WHERE tNum BETWEEN ${startRow} AND ${endRow}
+	</select>
+	<!-- 유저 인버터 리스트 -->
+	<select id="User_Inveter_List"
+		resultType="com.example.spring03.inverter.dto.inverterDTO">		
+        select
+a.Inverter_idx,
+a.Inverter_ID,
+a.t_group_id,
+a.inverter_name,
+b.t_group_name,
+a.Inverter_Model,
+a.Inverter_Capacity,
+a.Inverter_Manager,
+a.Inverter_Phone,
+a.Inverter_Reg_DATE
+from inverter as a
+left join 
+T_group as b
+on
+a.t_group_id = b.T_group_id
+where a.t_group_id = 700;
+	</select>
+	
+		<select id="User_Inverter_List_190919"
+		resultType="com.example.spring03.inverter.dto.inverterDTO">		
+        	SELECT sq.*, t_group_name as 'inverter_group_name'
+			FROM
+		    (SELECT    @rn := @rn +1 AS tNum
+			,inverter_idx
+			,inverter_id
+			,t_group_id
+			,inverter_username
+			,inverter_builder
+			,inverter_model
+			,inverter_capacity
+			,inverter_phone
+			,inverter_reg_date
+				
+		    FROM    (
+			    SELECT
+				*
+				,(SELECT t_group_name FROM t_group WHERE t_group_id = inverter.t_group_id) AS 'inverter_group_name' 
+			    FROM inverter
+			    
+			    ORDER BY inverter_idx DESC
+				)sa
+				,(SELECT @rn := 0) R
+		    ) sq
+		JOIN 
+		(SELECT t_group_id, t_group_name FROM t_group) as b
+		JOIN
+        (SELECT user_id, group_id FROM user WHERE user_id = #{userID}) as c
+		ON 
+		sq.t_group_id = b.t_group_id AND c.group_Id = sq.t_group_id
+		WHERE tNum BETWEEN ${startRow} AND ${endRow}
+	</select>
+	
+	<select id="User_Inverter_List_191010"
+		resultType="com.example.spring03.inverter.dto.inverterDTO">		
+        	SELECT sq.*, t_group_name as 'inverter_group_name'
+			FROM
+		    (SELECT    @rn := @rn +1 AS tNum
+			,inverter_idx
+			,inverter_id
+			,t_group_id
+			,inverter_username
+			,inverter_builder
+			,inverter_model
+			,inverter_capacity
+			,inverter_phone
+			,inverter_reg_date
+				
+		    FROM    (
+			    SELECT
+				*
+				,(SELECT t_group_name FROM t_group WHERE t_group_id = inverter.t_group_id) AS 'inverter_group_name' 
+			    FROM inverter
+			    
+			    ORDER BY inverter_idx DESC
+				)sa
+				,(SELECT @rn := 0) R
+		    ) sq
+		JOIN 
+		(SELECT t_group_id, t_group_name FROM t_group) as b
+		JOIN
+        (SELECT user_id, t_group_id FROM user_t_g WHERE user_id = #{userID} LIMIT 1) as c
+		ON 
+		sq.t_group_id = b.t_group_id AND c.t_group_Id = sq.t_group_id
+		WHERE tNum BETWEEN ${startRow} AND ${endRow}
+	</select>
+	
+	<!-- 등록 -->
+	<insert id="inverter_insert">
+		insert into inverter(
+		t_group_id,
+		inverter_id,
+		inverter_model,
+		inverter_capacity,
+		inverter_manager,
+		inverter_username,
+		inverter_owner,
+		inverter_builder,
+		inverter_phone,
+		history
+	)
+	values(
+		#{t_group_id},
+		#{inverter_id},
+		#{inverter_model},
+		#{inverter_capacity},
+		#{inverter_manager},
+		#{inverter_username},
+		#{inverter_owner},
+		#{inverter_builder},
+		#{inverter_phone},
+		#{history}
+		)
+	</insert>
+	<!-- 상세보기 -->
+	<select id="viewInverter"
+		resultType="com.example.spring03.inverter.dto.inverterDTO">
+   select 
+		inverter_idx,
+		inverter_id,
+		(SELECT t_group_name FROM t_group WHERE t_group_id = inverter.t_group_id) as 'inverter_group_name',
+		t_group_id, 
+		inverter_model,
+		inverter_owner,
+		inverter_builder,
+		inverter_capacity,
+		inverter_manager,
+		inverter_username,
+		inverter_completion_date,
+		inverter_reg_date,
+		inverter_install_date,
+		inverter_phone,
+		history
+		from inverter
+		where inverter_idx = #{inverter_idx}
+	</select>
+	
+	<update id="update">
+		update inverter
+		set
+		<!-- inverter_group_id	= #{inverter_group_id}, -->
+		inverter_model 		= #{inverter_model},
+		inverter_capacity 	= #{inverter_capacity},
+		inverter_builder 	= #{inverter_builder},
+		inverter_manager 	= #{inverter_manager},
+		inverter_owner 		= #{inverter_owner},
+		inverter_phone 		= #{inverter_phone},
+		inverter_username	= #{inverter_username},
+		history				= #{history}
+		where 
+		inverter_id = #{inverter_id} and inverter_idx =#{inverter_idx}
+		
+	</update>
+	<update id="update_190920">
+		update inverter
+		set
+		<!-- inverter_group_id	= #{inverter_group_id}, -->
+		inverter_model 		= #{inverter_model},
+		inverter_capacity 	= #{inverter_capacity},
+		inverter_builder 	= #{inverter_builder},
+		inverter_manager 	= #{inverter_manager},
+		inverter_owner 		= #{inverter_owner},
+		inverter_phone 		= #{inverter_phone},
+		inverter_username	= #{inverter_username},
+		history				= #{history}
+		where 
+		inverter_id = #{inverter_id} and inverter_idx =#{inverter_idx}
+		
+	</update>
+	
+	<delete id="delete" parameterType="int" statementType="PREPARED">
+		delete from inverter
+		where inverter_idx = #{inverter_idx}
+	</delete>
+
+	<select id="inverter_group_choice"
+		resultType="com.example.spring03.inverter.dto.inverterDTO">
+		select t_group_id, t_group_name from t_group
+	</select>
+	
+	
+	<select id="inverter_Check" resultType="com.example.spring03.inverter.dto.inverterDTO">
+	select inverter_idx from inverter
+	where inverter_idx =#{inverter_idx}
+	</select>
+	
+	<select id="t_group_Check" resultType="com.example.spring03.inverter.dto.inverterDTO">
+	select t_group_id from inverter
+	where t_group_id =#{t_group_id}
+	</select>
+	
+<!-- 일반 유저 -->
+<select id="User_inverter" resultType="com.example.spring03.inverter.dto.inverterDTO">
+select * from 
+inverter
+where 
+	(select Group_name from user 
+where user_id = 'admin') 
+	like concat('%',Inverter_name,'%') limit 1;
+	</select>
+	
+	<select id="User_inverter_190919" resultType="com.example.spring03.inverter.dto.inverterDTO">
+	SELECT * FROM 
+	( (SELECT * FROM inverter) as a
+	  JOIN
+	  (SELECT user_id, group_id FROM user WHERE user_id = #{userID}) as b
+	  ON a.t_group_id = b.group_id
+	);
+	</select>
+</mapper>
