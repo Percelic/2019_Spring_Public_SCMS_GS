@@ -1,0 +1,2 @@
+".\\logs\\Log-{yyyy-MM-dd}-%i.log"2019-02-28 14:19:14,840 TRACE [] Configuration File Defined to Be ::C:\Users\kkw94\eclipse-workspace\190222_SC_DataCollector\configuration.xml
+2019-02-28 14:19:14,843  WARN [] This is Warning msg.

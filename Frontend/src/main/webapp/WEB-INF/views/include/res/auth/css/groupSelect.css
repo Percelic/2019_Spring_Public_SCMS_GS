@@ -1,0 +1,288 @@
+::-webkit-input-placeholder {
+  color: rgba(0, 0, 0, 0.3);
+  vertical-align: middle;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: -0.4px;
+}
+.clearfix:after {
+  content: '';
+  clear: both;
+  display: block;
+  height: 0;
+  width: 0;
+}
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+#wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 990px;
+}
+/*****************************/
+/************ 메인 ************/
+.header {
+  position: relative;
+}
+.header .navigation {
+  box-sizing: border-box;
+  width: 100%;
+  height: 76px;
+  padding: 20px;
+  background: linear-gradient(to right, #d7efff, #c7ffc4);
+}
+.header .navigation .titleKor {
+  font-size: 34px;
+  font-weight: 100;
+  letter-spacing: -3px;
+}
+.header .navigation .titleKor .titleBold {
+  font-weight: 500;
+  font-size: inherit;
+  letter-spacing: inherit;
+}
+.header .navigation .titleEng {
+  font-size: 12px;
+  margin-left: 8px;
+  color: lightseagreen;
+  letter-spacing: 0;
+}
+.header .utilRec {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+.header .utilRec li {
+  display: inline-block;
+}
+.header .utilRec .loginId {
+  font-size: 16px;
+  color: green;
+  letter-spacing: 1px;
+}
+.header .utilRec .btnRec {
+  margin-left: 16px;
+}
+.header .utilRec .btnRec .btnLogout {
+  font-size: 14px;
+  color: #888;
+  background-color: white;
+  border: 1px solid #999;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+.header .utilRec .btnRec .btnLogout:hover {
+  color: #222;
+  border: 1px solid lightseagreen;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+.container {
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  min-width: 990px;
+  height: 100%;
+}
+.container .content {
+  padding: 30px;
+  /***** 전송 목록 *****/
+}
+.container .content .selectMapRec {
+  box-sizing: border-box;
+  float: left;
+  width: 300px;
+  height: 100%;
+}
+.container .content .selectMapRec .titleTx {
+  font-size: 24px;
+  font-weight: 300;
+  color: #333;
+  line-height: 1.0;
+  letter-spacing: -1.6px;
+}
+.container .content .selectMapRec .subTx {
+  padding-top: 8px;
+  font-size: 14px;
+  color: #bbb;
+  letter-spacing: -1px;
+}
+.container .content .selectMapRec .mapRec {
+  width: 100%;
+  height: 420px;
+  margin-top: 20px;
+  background-color: #f1f1f1;
+}
+.container .content .tableRec {
+  float: left;
+  box-sizing: border-box;
+  width: calc(100% - 300px);
+  padding: 30px 0 0 30px;
+}
+.container .content .tableRec .searchRec {
+  position: relative;
+  margin-top: 12px;
+  padding: 10px;
+  background-color: #f1f1f1;
+}
+.container .content .tableRec .searchRec .searchTerms {
+  font-size: 0;
+}
+.container .content .tableRec .searchRec .searchTerms li {
+  display: inline-block;
+  margin-right: 20px;
+}
+.container .content .tableRec .searchRec .searchTerms li .searchTermsTx {
+  margin-right: 4px;
+  font-size: 12px;
+}
+.container .content .tableRec .searchRec .searchTerms li:last-child {
+  margin: 0;
+}
+.container .content .tableRec .searchRec .searchTerms .selectBox {
+  height: 33px;
+}
+.container .content .tableRec .searchRec .searchBtn {
+  display: inline-block;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 8px 16px;
+  font-size: 14px;
+  color: white;
+  background-color: lightseagreen;
+  border-radius: 4px;
+}
+.container .content .tableRec .resultListTable {
+  width: 100%;
+  border-top: 1px solid #999;
+  border-bottom: 1px solid #999;
+  text-align: left;
+}
+.container .content .tableRec .resultListTable .tableHead {
+  border-bottom: 1px solid #999;
+}
+.container .content .tableRec .resultListTable .tableHead th {
+  padding: 10px 4px;
+  font-size: 12px;
+}
+.container .content .tableRec .resultListTable .tableBody tr {
+  border-bottom: 1px solid #eee;
+}
+.container .content .tableRec .resultListTable .tableBody tr:last-child {
+  border: none;
+}
+.container .content .tableRec .resultListTable .tableBody tr:hover {
+  background-color: #f4f4f4;
+}
+.container .content .tableRec .resultListTable .tableBody tr:hover .btn a {
+  color: #333;
+  background-color: white;
+  border: 1px solid #999;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+.container .content .tableRec .resultListTable .tableBody td {
+  padding: 14px 4px;
+  color: #999;
+  font-size: 13px;
+}
+.container .content .tableRec .resultListTable .tableBody .name {
+  line-height: 17px;
+}
+.container .content .tableRec .resultListTable .tableBody .bold {
+  color: #333;
+  font-weight: 500;
+}
+.container .content .tableRec .resultListTable .txC {
+  text-align: center;
+}
+.container .content .tableRec .resultListTable .txR {
+  text-align: right;
+  padding-right: 20px !important;
+}
+.container .content .tableRec .resultListTable .tx12 {
+  font-size: 12px !important;
+}
+.container .content .tableRec .resultListTable .btn {
+  vertical-align: middle;
+}
+.container .content .tableRec .resultListTable .btn a {
+  box-sizing: border-box;
+  padding: 4px 10px 5px;
+  color: #666;
+  font-size: 12px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+.container .content .pageNum {
+  width: 100%;
+  margin: 30px 0 20px;
+  text-align: center;
+}
+.container .content .pageNum > ul {
+  font-size: 0;
+}
+.container .content .pageNum > ul > li {
+  box-sizing: border-box;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  padding: 8px 0;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  margin-right: 4px;
+  color: #bbb;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.container .content .pageNum > ul > li:last-child {
+  margin: 0;
+}
+.container .content .pageNum > ul > li:hover,
+.container .content .pageNum > ul > li.active {
+  color: #333;
+  border: 1px solid #117f7f;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+.footer {
+  clear: both;
+  width: 100%;
+  min-width: 960px;
+  border-top: 1px solid #bbb;
+  padding: 14px 20px 20px;
+  background-color: white;
+}
+.footer h3 {
+  font-size: 12px;
+  color: #999;
+  font-weight: 300;
+  letter-spacing: 0.4px;
+  font-family: 'Roboto';
+}
+/************************************************/
+/************************************************/
+.inputField {
+  background-color: white;
+  box-sizing: border-box;
+  font-size: 12px;
+  width: 140px;
+}
+.selectBox {
+  font-size: 12px;
+  background-color: white;
+}
+.num {
+  letter-spacing: 0;
+}
+.pdL36 {
+  padding-left: 36px;
+}

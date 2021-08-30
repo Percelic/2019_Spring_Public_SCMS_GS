@@ -1,0 +1,258 @@
+@charset "utf-8";
+/* @import url("https://fonts.googleapis.com/earlyaccess/notosanskr.css"); */
+
+/* NTS Joontop */
+
+/* Reset */
+html {
+  -webkit-text-size-adjust: none; 
+  -moz-text-size-adjust: none; 
+  -ms-text-size-adjust: none; 
+}
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video, select {
+	margin: 0;
+	padding: 0;
+	font-size: 14px;
+	font-weight: normal;
+	line-height: 1.0;
+	vertical-align: baseline;
+	font-family: 'Roboto','Noto Sans KR','Helvetica Neue',Helvetica,Arial,sans-serif;
+	letter-spacing: -0.4px;
+}
+
+/* body min widht */
+body.pc {
+	min-width: 960px;
+}
+
+body.table, body.mobile {
+	min-width: 320px;
+}
+
+caption {
+	display:none
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, section {
+	display: block;
+}
+
+ol, ul {
+	list-style: none;
+	font-size: 0;
+}
+
+blockquote, q {
+	quotes: none;
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+	content: '';
+	content: none;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	table-layout: fixed;
+	display: table;
+}
+
+a {
+	text-decoration: none;
+	color:inherit;
+}
+
+a:hover {
+	color:inherit;
+}
+
+ul {
+	*zoom: 1;
+}
+
+img {
+	border: 0;
+}
+
+label * {
+	vertical-align: middle;
+}
+
+strong, b {
+	font-weight: bold;
+}
+
+button {
+	background: none;
+	border: 0;
+	outline: none;
+	cursor: pointer;
+}
+
+/* input-text */
+fieldset,input {
+	border: none;
+}
+
+input {
+	padding: 8px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 14px;
+}
+
+select {
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+input[type=checkbox], input[type=radio] {
+	width: 13px;
+	height: 13px;
+	vertical-align:middle;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+/****************************/
+/********** Common **********/
+/****************************/
+
+.show{
+	display: block
+}
+
+.hide{
+	display: none
+}
+
+.blind,legend {
+	display: block;
+	overflow: hidden;
+	position: absolute;
+	top: -1000em;
+	left: 0
+}
+
+.ir {
+	display: block;
+	overflow: hidden;
+	position: relative;
+	z-index: -1;
+	height: 11px;
+	font-size: 11px;
+	white-space: nowrap;
+}
+
+.ellipsis {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	-o-text-overflow: ellipsis;
+}
+
+.shadow2 {
+	overflow: hidden;
+	position: absolute;
+	left: 0;
+	bottom: -3px;
+	width: 100%;
+	height: 2px;
+	background: url(http://img.naver.net/static/www/img/bg_shadow.png);
+	_background: none;
+	font-size: 0;
+	line-height: 0;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://img.naver.net/static/www/img/bg_shadow.png',sizingMethod='scale');
+}
+
+.flash_fix {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: -1;
+	width: 100%;
+	height: 100%;
+}
+
+#dim {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 99;
+	width: 100%;
+	height: 100%;
+	background:url(http://img.naver.net/static/w9/blank.gif) repeat;
+}
+
+.entry-title {
+	display: none
+}
+
+.clearfix:before, .clearfix:after {
+	content: "";
+	display: table;
+}
+
+.clearfix:after {
+	clear: both;
+}
+
+.clearfix {
+	*zoom: 1;
+}
+
+iframe {
+	vertical-align: top
+}
+
+.w100 {
+	width: 100%;
+}
+
+.h100 {
+	height: 100%;
+}
+
+.vetical_t {
+	vertical-align: top !important;
+}
+
+.vetical_m {
+	vertical-align: middle !important;
+}
+
+.vetical_b {
+	vertical-align: bottom !important;
+}
+
+.txL { text-align: left !important; }
+.txR { text-align: right !important; }
+.txC { text-align: center !important; }
+
+.num { letter-spacing: 0; }
+
+.ft11 { font-size: 11px !important; }
+.ft12 { font-size: 12px !important; }
+.ft13 { font-size: 13px !important; }
+.ft14 { font-size: 14px !important; }
+
+.font_b { font-weight: 500; }
+
+.lh15 { line-height: 15px !important; }
+.lh17 { line-height: 17px !important; }
+.lh19 { line-height: 19px !important; }
+.lh21 { line-height: 21px !important; }
+
+.mg00 { margin: 0 !important; }
+.pd00 {	padding: 0 !important; }
+.pdL36 { padding-left: 36px; }
+

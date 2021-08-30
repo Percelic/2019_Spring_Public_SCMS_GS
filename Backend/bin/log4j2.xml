@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+
+<Configuration>
+	<Properties>
+		<property name="filePattern">${date:yyyyMMdd_HHmmss}</property>
+	</Properties>
+
+
+	<Appenders>
+		<Console name="Console">
+			<PatternLayout pattern="%d{yy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+		</Console>
+		
+		<RollingFile name="rollingFile" fileName="./DataCollector_logs/DataCollector_Log-${filePattern}.log" filePattern="./DataCollector_logs/DataCollector_Log-${filePattern}-%i.log">
+			<Policies>
+				<!--  <TimeBasedTriggeringPolicy/>-->
+			</Policies>
+			<PatternLayout pattern="%d{yy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+		</RollingFile>
+	</Appenders>
+	
+	<Loggers>
+		<Root level="DEBUG">
+			<AppenderRef ref="Console"/>
+			<AppenderRef ref="rollingFile"/>
+		</Root>
+	</Loggers>
+</Configuration>

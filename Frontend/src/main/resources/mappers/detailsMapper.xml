@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
+<mapper namespace="details">
+
+	<select id="tracker_ID" resultType="com.example.spring03.details.dto.DetailsDTO">
+	select  
+t_group_id, tracker_id
+from t_tracker
+where t_group_id = #{t_group_id}	
+	</select>
+
+	<select id="details_list"
+		resultType="com.example.spring03.details.dto.DetailsDTO">
+		select
+			t_group_id
+			,t_group_name
+			,if(t_group_capacity IS NULL, '0', t_group_capacity)
+			,t_group_addr
+			,t_group_ip
+			
+		from t_group
+	</select>
+	
+	
+	<select id="details_list_190916"
+		resultType="com.example.spring03.details.dto.DetailsDTO">
+		select a.t_group_id, t_group_name, ifnull(SUM(tracker_capacity),0) as 't_group_capacity',t_group_addr,t_group_ip FROM
+		(SELECT
+					t_group_id
+					,t_group_name
+					,t_group_addr
+					,t_group_ip
+					
+				from t_group) as a  
+		LEFT JOIN 
+		(SELECT * FROM t_tracker) as b
+		ON a.t_group_id = b.t_group_id
+		GROUP BY t_group_id;
+	
+	</select>
+	<!-- 발전량 보여주기 -->
+	<select id="view"
+		resultType="com.example.spring03.details.dto.DetailsDTO">
+		select
+		t_group_id,
+		t_group_name,
+		t_group_manager,
+		t_group_mode
+		from t_group 
+		where t_group_id = #{t_group_id}
+	</select>
+
+	<!-- 날씨 정보 보여주기 -->
+	<select id="group_weather"
+		resultType="com.example.spring03.details.dto.DetailsDTO">
+		select
+		ifnull(Area_code,"-") as Area_code,
+		ifnull(area_name, "-")as area_name,
+		ifnull(weather_t_min, "-")as weather_t_min,
+		ifnull(weather_t_max, "-")as weather_t_max,
+		ifnull(weather_finedust_concentration, "-")as weather_finedust_concentration,
+		ifnull(weather_ultrafinedust_concentration, "-")as weather_ultrafinedust_concentration,
+		ifnull(weather_ozone_concentration, "-") as weather_ozone_concentration
+		from group_weather WHERE (SELECT
+		t_group_addr FROM t_group WHERE
+		t_group_id
+		= #{t_group_id}) LIKE CONCAT('%',Area_Name,'%')
+	   order by Weather_Date desc limit 1
+	</select>
+
+	<!-- 센서 데이터 정보 -->
+	<select id="sensordate"
+		resultType="com.example.spring03.details.dto.DetailsDTO">
+		SELECT
+			ifnull(b.sensor_data_module_temp, "-") as sensor_data_module_temp,
+			ifnull(b.sensor_data_ambient_temp,"-") as sensor_data_ambient_temp,
+			ifnull(b.sensor_data_horizontal_idt, "-" ) as sensor_data_horizontal_idt, 
+			ifnull(b.sensor_data_slope_idt, "-") as sensor_data_slope_idt
+		FROM (SELECT t_group_id FROM t_group WHERE t_group_id = #{t_group_id}) AS a 
+		LEFT JOIN
+		(SELECT t_group_id, sensor_data_module_temp, sensor_data_ambient_temp, sensor_data_horizontal_idt, sensor_data_slope_idt FROM sensor_data WHERE tracker_id =  1 ORDER BY sensor_data_date DESC LIMIT 1) AS b 
+		ON a.t_group_id = b.t_group_id;		
+
+	</select>
+	
+	<select id="sensordate_191022"
+		resultType="com.example.spring03.details.dto.DetailsDTO">
+		SELECT
+            ifnull(b.sensor_data_module_temp, "-") as sensor_data_module_temp,
+			ifnull(b.sensor_data_ambient_temp,"-") as sensor_data_ambient_temp,
+			ifnull(b.sensor_data_horizontal_idt, "-" ) as sensor_data_horizontal_idt, 
+			ifnull(b.sensor_data_slope_idt, "-") as sensor_data_slope_idt
+		FROM (SELECT t_group_id FROM t_group WHERE t_group_id = #{t_group_id}) AS a 
+		LEFT JOIN
+		(SELECT * FROM (SELECT t_group_id, sensor_data_module_temp, sensor_data_ambient_temp, sensor_data_horizontal_idt, sensor_data_slope_idt,  sensor_data_date FROM sensor_data WHERE tracker_id =  1 ORDER BY sensor_data_date DESC LIMIT 1000000000) as a GROUP BY t_group_id) AS b 
+		ON a.t_group_id = b.t_group_id;		
+
+	</select>
+	
+	
+	<!-- 알람 정보 -->
+	<select id="t_alarm" resultType="com.example.spring03.details.dto.DetailsDTO">
+		select * from t_alarm
+		where t_group_id = #{t_group_id} AND t_group_id > 0
+		order by Alarm_Upt_Data desc limit 10; 
+	</select>
+
+	
+	<!-- 트래커 제어 _  -->
+	<select id="tracker"
+		resultType="com.example.spring03.details.dto.DetailsDTO">
+		SELECT 
+		DISTINCT tracker_id FROM t_tracker WHERE t_group_id = #{t_group_id};
+	</select>
+	<!-- 트래커 제어 _  -->
+	<select id="trackerList"
+		resultType="com.example.spring03.details.dto.DetailsDTO">
+		select
+			t_group_id
+			,tracker_id
+		from	t_tracker
+		where t_group_id = #{t_group_id} order by tracker_id asc;
+	</select>
+	
+	
+<!-- 금일 발전량  -->
+	<select id="inverter_today" resultType="com.example.spring03.details.dto.DetailsDTO">
+	<![CDATA[
+	SELECT IFNULL(CAST(SUM(inverter_data_output) * 0.001 AS DECIMAL(65,1)),0) as 'inverter_data_accu_energy' 
+	FROM inverter_data WHERE DATE(inverter_data_date) = DATE(NOW()) AND t_group_id = #{t_group_id};
+]]>
+	</select>
+	
+	<!--전일 발전량 -->
+	<select id="inverter_date" 	resultType="com.example.spring03.details.dto.DetailsDTO">
+	<![CDATA[
+	SELECT IFNULL(CAST(SUM(inverter_data_output) *  0.001 AS DECIMAL(65,1)),0) as 'inverter_data_accu_energy' 
+	FROM inverter_data WHERE DATE(inverter_data_date) = DATE(DATE_SUB(NOW(), INTERVAL 1 day)) AND t_group_id = #{t_group_id};
+]]>
+	</select>
+		
+	<!--누적을 나타내는 쿼리입니다. -->
+	<select id="total_data1" resultType="com.example.spring03.details.dto.DetailsDTO">
+	select 
+ifnull(CAST(inverter_data_accu_energy * 0.001 as DECIMAL(65,0)),0) as inverter_data_accu_energy 
+from inverter_data
+where t_group_id = #{t_group_id}
+	</select>
+	
+	<!--현재발전량 을 나타내는 쿼리입니다. -->
+	<select id="total_data" resultType="com.example.spring03.details.dto.DetailsDTO">
+	<![CDATA[
+	SELECT IFNULL(CAST(SUM(inverter_data_output) * 0.001 AS DECIMAL(65,1)),0) as inverter_data_output 
+	FROM (SELECT * FROM (SELECT t_group_id, inverter_data_id, inverter_data_output, inverter_data_date 
+							FROM inverter_data WHERE inverter_data_date >= DATE_SUB(NOW(), INTERVAL 20 minute)
+			 				ORDER BY inverter_data_date DESC LIMIT 1000000000000)
+			 			AS a 
+			 			GROUP BY t_group_id, inverter_data_id) AS a 
+	WHERE t_group_id = #{t_group_id};
+]]>
+	</select>
+	
+	<!-- 누적 발전량 -->
+	<select id="Cumulative_power_generation" resultType="com.example.spring03.details.dto.DetailsDTO">
+	SELECT IFNULL(CAST(SUM(inverter_data_accu_energy) * 0.001 AS DECIMAL(65,0)),0) AS 'inverter_data_accu_energy' 
+	FROM (SELECT * FROM (SELECT t_group_id, inverter_data_id, inverter_data_accu_energy 
+						 FROM inverter_data ORDER BY inverter_data_date DESC LIMIT 100000000000000000) AS a 
+		  WHERE a.t_group_id = #{t_group_id} GROUP BY inverter_data_id) as a;
+	</select>
+	
+	<select id="Cumulative_power_generation_190927" resultType="com.example.spring03.details.dto.DetailsDTO">
+	SELECT IFNULL(CAST(SUM(inverter_data_accu_energy) * 0.001 AS DECIMAL(65,0)),0) AS 'inverter_data_accu_energy' FROM (
+    	SELECT * FROM (SELECT t_group_id, inverter_data_id, inverter_data_accu_energy, inverter_data_date
+						 FROM inverter_data WHERE t_group_id = #{t_group_id} ORDER BY inverter_data_date DESC LIMIT 100000000000000000) AS a
+  	GROUP BY inverter_data_id  ) as a;
+	</select>
+	
+	
+	
+	<select id="group_id" resultType="com.example.spring03.details.dto.DetailsDTO">
+	select t_group_id from t_group
+where t_group_id = #{t_group_id}
+	</select>
+	
+	<!-- 유저 정보 들어갑니다. -->
+	<select id="User_Details" resultType="com.example.spring03.details.dto.DetailsDTO">
+	select 
+	user_id,
+    t_group_id
+ from user_t_g
+ where user_id = #{user_id} LIMIT 1
+	</select>
+	
+	<!-- 유저 뷰 -->
+	<select id="User_View" resultType="com.example.spring03.details.dto.DetailsDTO">
+	select 
+	t_group_id, 
+    t_group_name, 
+    t_group_capacity, 
+    t_group_email, 
+    t_group_ip 
+    from t_group 
+    where t_group_id = #{t_group_id}
+	</select>
+	
+	<!-- 군집 테이블 주소 Addr, addr2 -->
+	<select id="Addr"
+		resultType="com.example.spring03.details.dto.DetailsDTO">
+		select t_group_addr, t_group_addr2 from t_group
+		where
+		t_group_id = #{t_group_id}
+	</select>
+	
+	<!--  누적 발전량 완료 -->	<!--  누적 발전량 완료 -->	<!--  누적 발전량 완료 -->	<!--  누적 발전량 완료 -->	<!--  누적 발전량 완료 -->	<!--  누적 발전량 완료 -->	<!--  누적 발전량 완료 -->	<!--  누적 발전량 완료 -->	<!--  누적 발전량 완료 -->
+	<!-- 가로수 마을 108동  -->
+	<select id="A_dong" resultType="com.example.spring03.details.dto.DetailsDTO">
+select 
+ifnull(CAST(inverter_data_accu_energy * 0.001 as DECIMAL(65,0)),0) as inverter_data_accu_energy 
+from
+(select * from (select
+t_group_id,
+inverter_data_id,
+inverter_data_accu_energy, 
+inverter_data_date
+from inverter_data where inverter_data_id = 1
+order by inverter_data_date desc limit 1000000000000) as a 
+group by t_group_id,inverter_data_id) as a 
+where t_group_id = #{t_group_id};
+
+	</select>
+	<!-- 가로수 마을  101동 -->
+	<select id="B_dong" resultType="com.example.spring03.details.dto.DetailsDTO">
+select 
+ifnull(CAST(inverter_data_accu_energy * 0.001 as DECIMAL(65,0)),0) as inverter_data_accu_energy 
+from
+(select * from 
+(select
+t_group_id,
+inverter_data_id,
+inverter_data_accu_energy, 
+inverter_data_date
+from inverter_data where inverter_data_id = 2
+order by inverter_data_date desc limit 1000000000000) as a 
+group by t_group_id,inverter_data_id) as a 
+where t_group_id = #{t_group_id};
+
+	</select>
+	<!-- 가로수 마을  104동 -->
+	<select id="C_dong" resultType="com.example.spring03.details.dto.DetailsDTO">
+select 
+ifnull(CAST(inverter_data_accu_energy * 0.001 as DECIMAL(65,0)),0) as inverter_data_accu_energy 
+from
+(select * from 
+(select
+t_group_id,
+inverter_data_id,
+inverter_data_accu_energy, 
+inverter_data_date
+from inverter_data where inverter_data_id = 3
+order by inverter_data_date desc limit 1000000000000) as a 
+group by t_group_id,inverter_data_id) as a 
+where t_group_id = #{t_group_id};
+
+	</select>
+	<!-- 가로수 마을  106동 -->
+	<select id="D_dong" resultType="com.example.spring03.details.dto.DetailsDTO">
+select 
+ifnull(CAST(inverter_data_accu_energy * 0.001 as DECIMAL(65,0)),0) as inverter_data_accu_energy 
+from
+(select * from 
+(select
+t_group_id,
+inverter_data_id,
+inverter_data_accu_energy, 
+inverter_data_date
+from inverter_data where inverter_data_id = 4
+order by inverter_data_date desc limit 1000000000000) as a 
+group by t_group_id,inverter_data_id) as a 
+where t_group_id = #{t_group_id};
+	</select>
+	<!-- 가로수 마을  107동 -->
+	<select id="E_dong" resultType="com.example.spring03.details.dto.DetailsDTO">
+select 
+ifnull(CAST(inverter_data_accu_energy * 0.001 as DECIMAL(65,0)),0) as inverter_data_accu_energy 
+from
+(select * from 
+(select
+t_group_id,
+inverter_data_id,
+inverter_data_accu_energy, 
+inverter_data_date
+from inverter_data where inverter_data_id = 5
+order by inverter_data_date desc limit 1000000000000) as a 
+group by t_group_id,inverter_data_id) as a 
+where t_group_id = #{t_group_id};
+	</select>
+	<!-- 가로수 마을  109동 -->
+	<select id="F_dong" resultType="com.example.spring03.details.dto.DetailsDTO">
+select 
+ifnull(CAST(inverter_data_accu_energy * 0.001 as DECIMAL(65,0)),0) as inverter_data_accu_energy 
+from
+(select * from 
+(select
+t_group_id,
+inverter_data_id,
+inverter_data_accu_energy, 
+inverter_data_date
+from inverter_data where inverter_data_id = 6
+order by inverter_data_date desc limit 1000000000000) as a 
+group by t_group_id,inverter_data_id) as a 
+where t_group_id = #{t_group_id};
+	</select>
+	<!--  누적 발전량 완료 -->	<!--  누적 발전량 완료 -->	<!--  누적 발전량 완료 -->	<!--  누적 발전량 완료 -->	<!--  누적 발전량 완료 -->	<!--  누적 발전량 완료 -->	<!--  누적 발전량 완료 -->
+	
+	
+	
+	
+	<!--  현재 발전량 완료 -->	<!--  현재 발전량 완료 -->	<!--  현재 발전량 완료 -->	<!--  현재 발전량 완료 -->	<!--  현재 발전량 완료 -->	<!--  현재 발전량 완료 -->	<!--  현재 발전량 완료 -->
+		<select id="AA_dong" resultType="com.example.spring03.details.dto.DetailsDTO">
+SELECT 
+CASE WHEN COUNT(*) = 0 THEN CONVERT('0.0', SIGNED) 
+	ELSE CAST(Inverter_data_output * 0.001 as DECIMAL(65,1))
+    END as Inverter_data_output,
+    inverter_data_date
+FROM ( 
+SELECT  t_group_id , inverter_data_id ,inverter_data_output, inverter_data_date FROM inverter_data 
+WHERE inverter_data_id = 1
+AND t_group_Id = #{t_group_id} 
+AND inverter_data_date >= DATE_SUB(NOW(), interval 20 minute) 
+ORDER BY Inverter_Data_date DESC limit 10 ) as a; 
+	</select>
+	
+		<select id="BB_dong" resultType="com.example.spring03.details.dto.DetailsDTO">
+SELECT 
+CASE WHEN COUNT(*) = 0 THEN CONVERT('0.0', SIGNED) 
+	ELSE CAST(Inverter_data_output * 0.001 as DECIMAL(65,1))
+    END as Inverter_data_output,
+    inverter_data_date
+FROM ( 
+SELECT  t_group_id , inverter_data_id ,inverter_data_output, inverter_data_date FROM inverter_data 
+WHERE inverter_data_id = 2
+AND t_group_Id = #{t_group_id} 
+AND inverter_data_date >= DATE_SUB(NOW(), interval 20 minute) 
+ORDER BY Inverter_Data_date DESC limit 10 ) as a; 
+	</select>
+	
+		<select id="CC_dong" resultType="com.example.spring03.details.dto.DetailsDTO">
+SELECT 
+CASE WHEN COUNT(*) = 0 THEN CONVERT('0.0', SIGNED) 
+	ELSE CAST(Inverter_data_output * 0.001 as DECIMAL(65,1))
+    END as Inverter_data_output,
+    inverter_data_date
+FROM ( 
+SELECT  t_group_id , inverter_data_id ,inverter_data_output, inverter_data_date FROM inverter_data 
+WHERE inverter_data_id = 3
+AND t_group_Id = #{t_group_id} 
+AND inverter_data_date >= DATE_SUB(NOW(), interval 20 minute) 
+ORDER BY Inverter_Data_date DESC limit 10 ) as a; 
+	</select>
+	
+		<select id="DD_dong" resultType="com.example.spring03.details.dto.DetailsDTO">
+SELECT 
+CASE WHEN COUNT(*) = 0 THEN CONVERT('0.0', SIGNED) 
+	ELSE CAST(Inverter_data_output * 0.001 as DECIMAL(65,1))
+    END as Inverter_data_output,
+    inverter_data_date
+FROM ( 
+SELECT  t_group_id , inverter_data_id ,inverter_data_output, inverter_data_date FROM inverter_data 
+WHERE inverter_data_id = 4
+AND t_group_Id = #{t_group_id} 
+AND inverter_data_date >= DATE_SUB(NOW(), interval 20 minute) 
+ORDER BY Inverter_Data_date DESC limit 10 ) as a; 
+	</select>
+	
+		<select id="EE_dong" resultType="com.example.spring03.details.dto.DetailsDTO">
+SELECT 
+CASE WHEN COUNT(*) = 0 THEN CONVERT('0.0', SIGNED) 
+	ELSE CAST(Inverter_data_output * 0.001 as DECIMAL(65,1))
+    END as Inverter_data_output,
+    inverter_data_date
+FROM ( 
+SELECT  t_group_id , inverter_data_id ,inverter_data_output, inverter_data_date FROM inverter_data 
+WHERE inverter_data_id = 5
+AND t_group_Id = #{t_group_id} 
+AND inverter_data_date >= DATE_SUB(NOW(), interval 20 minute) 
+ORDER BY Inverter_Data_date DESC limit 10 ) as a; 
+	</select>
+	
+		<select id="FF_dong" resultType="com.example.spring03.details.dto.DetailsDTO">
+SELECT 
+CASE WHEN COUNT(*) = 0 THEN CONVERT('0.0', SIGNED) 
+	ELSE CAST(Inverter_data_output * 0.001 as DECIMAL(65,1))
+    END as Inverter_data_output,
+    inverter_data_date
+FROM ( 
+SELECT  t_group_id , inverter_data_id ,inverter_data_output, inverter_data_date FROM inverter_data 
+WHERE inverter_data_id = 6
+AND t_group_Id = #{t_group_id}  
+AND inverter_data_date >= DATE_SUB(NOW(), interval 20 minute) 
+ORDER BY Inverter_Data_date DESC limit 10 ) as a; 
+	</select>
+	<!--  현재 발전량 완료 -->	<!--  현재 발전량 완료 -->	<!--  현재 발전량 완료 -->	<!--  현재 발전량 완료 -->	<!--  현재 발전량 완료 -->	<!--  현재 발전량 완료 -->	<!--  현재 발전량 완료 -->	<!--  현재 발전량 완료 -->	
+	
+	
+	
+	
+</mapper>

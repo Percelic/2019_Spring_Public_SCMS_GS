@@ -1,0 +1,53 @@
+History.
+
+19-05-07
+ - change Protocol Data Order (CMD <-> SI, TR-ID ) and add some protocols 
+
+19-05-17
+ - solve bind in use Exception occured when start simulation if port in use.
+ - solve socket write exception occured when start simulation if socket not connected.
+ 
+19-05-27 ( 05-07 ~ 17 )
+ - �쓬�쁺媛� �삉�뒗 �쓬�쁺 ADC 媛� �쟾�넚 媛��뒫
+ 
+19-06-03
+ - CS媛� 踰붿쐞 �닔�젙 ( STX ~ CS�븵 , 源뚯� )
+ 
+
+--------------
+
+19-06-25
+ - SocketConnector 遺�遺�, logger 硫붿떆吏� �닔�젙
+ 
+---------------
+
+19-07-01
+ - �썝寃� Alarm 諛쒖깮 湲곕뒫 異붽� �삁�젙
+ - �썝寃� Alarm 諛쒖깮 湲곕뒫 異붽�
+ 
+19-07-02
+ - �썝寃� Alarm �뵒踰꾧퉭
+ 
+----------------------
+
+19-07-15
+ - alarm ���긽 �꽑�깮 以� 諛쒖깮 踰꾧렇 �닔�젙 
+ 
+ 
+ 
+19-12-19
+
+ * 프로토콜 추가
+   - 음영  및 ADC 프로토콜 정보 추가
+   - 상태 프로토콜 정보 추가
+ 
+ * 메뉴 추가
+   - 상태 프로토콜 송신 여부 추가
+   - 1분주기 음영 및 ADC 정보 송신 여부 추가
+ 
+
+21-02-12
+
+ * 인버터 현재출력비율 입력 추가
+
+ 

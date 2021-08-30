@@ -1,0 +1,365 @@
+
+@M_color: #117f7f;
+
+@headerHeight: 76px;
+@topHeight: 60px;
+@containerWidth: 960px;
+@maxWidth: 1280px;
+@navWidth: 200px;
+@radius: 4px;
+@footerHeight: 60px;
+
+::-webkit-input-placeholder {
+	color: rgba(0, 0, 0, 0.3);
+	vertical-align: middle;
+	text-align: left;
+	font-size: 14px;
+	font-weight: 400;
+	letter-spacing: -0.4px;
+}
+
+.clearfix:after {
+	content: '';
+	clear: both;
+	display: block;
+	height: 0;
+	width: 0;
+}
+
+html, body {
+	width: 100%;
+	height: 100%;
+}
+
+#wrap {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	min-width: 990px;
+}
+
+/*****************************/
+/************ 메인 ************/
+
+.header {
+	position: relative;
+
+	.navigation {
+		box-sizing: border-box;
+		width: 100%;
+		height: @headerHeight;
+		padding: 20px;
+		background: linear-gradient(to right, #d7efff, #c7ffc4);
+		// box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2);
+
+		.titleKor {
+			font-size: 34px;
+			font-weight: 100;
+			letter-spacing: -3px;
+
+			.titleBold {
+				font-weight: 500;
+				font-size: inherit;
+				letter-spacing: inherit;
+			}
+		}
+
+		.titleEng {
+			font-size: 12px;
+			margin-left: 8px;
+			color: lightseagreen;
+			letter-spacing: 0;
+		}
+	}
+
+	.utilRec {
+		position: absolute;
+		top: 20px;
+		right: 20px;
+
+		li {
+			display: inline-block;
+		}
+
+		.loginId {
+			font-size: 16px;
+			color: green;
+			letter-spacing: 1px;
+		}
+
+		.btnRec {
+			margin-left: 16px;
+
+			.btnLogout {
+				font-size: 14px;
+				color: #888;
+				background-color: white;
+				border: 1px solid #999;
+				box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+				border-radius: 4px;
+				padding: 8px 14px;
+				cursor: pointer;
+
+				&:hover {
+					color: #222;
+					border: 1px solid lightseagreen;
+					box-shadow: 0 1px 2px rgba(0,0,0,0.4);
+				}
+			}
+		}
+	}
+}
+
+.container {
+	box-sizing: border-box;
+	position: relative;
+	width: 100%;
+	min-width: 990px;
+	height: 100%;
+
+	.content {
+		padding: 30px;
+
+		.selectMapRec {
+			box-sizing: border-box;
+			float: left;
+			width: 300px;
+			height: 100%;
+
+			.titleTx {
+				font-size: 24px;
+				font-weight: 300;
+				color: #333;
+				line-height: 1.0;
+				letter-spacing: -1.6px;
+			}
+
+			.subTx {
+				padding-top: 8px;
+				font-size: 14px;
+				color: #bbb;
+				letter-spacing: -1px;
+			}
+
+			.mapRec {
+				width: 100%;
+				height: 420px;
+				margin-top: 20px;
+				background-color: #f1f1f1;
+			}
+		}
+
+		/***** 전송 목록 *****/
+		.tableRec {
+			float: left;
+			box-sizing: border-box;
+			width: calc(100% ~"- 300px");
+			padding: 30px 0 0 30px;
+
+			.searchRec {
+				position: relative;
+				margin-top: 12px;
+				padding: 10px;
+				background-color: #f1f1f1;
+
+				.searchTerms {
+					font-size: 0;
+
+					li {
+						display: inline-block;
+						margin-right: 20px;
+
+						.searchTermsTx {
+							margin-right: 4px;
+							font-size: 12px;
+						}
+
+						&:last-child {
+							margin: 0;
+						}
+					}
+
+					.selectBox {
+						height: 33px;
+					}
+				}
+
+				.searchBtn {
+					display: inline-block;
+					position: absolute;
+					top: 10px;
+					right: 10px;
+					padding: 8px 16px;
+					font-size: 14px;
+					color: white;
+					background-color: lightseagreen;
+					border-radius: 4px;
+				}
+			}
+
+			.resultListTable {
+				width: 100%;
+				border-top: 1px solid #999;
+				border-bottom: 1px solid #999;
+				text-align: left;
+				// table-layout: fixed;
+
+				.tableHead {
+					border-bottom: 1px solid #999;
+
+					th {
+						padding: 10px 4px;
+						font-size: 12px;
+					}
+				}
+
+				.tableBody {
+
+					tr {
+						// border-radius: @radius;
+						border-bottom: 1px solid #eee;
+						// box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+
+						&:last-child {
+							border: none;
+						}
+
+						&:hover {
+							background-color: #f4f4f4;
+
+							.btn a {
+								color: #333;
+								background-color: white;
+								border: 1px solid #999;
+								box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+							}
+						}
+					}
+
+					td {
+						padding: 14px 4px;
+						color: #999;
+						font-size: 13px;
+					}
+
+					.name {
+						line-height: 17px;
+					}
+
+					.bold {
+						color: #333;
+						font-weight: 500;
+					}
+				}
+
+				.txC {
+					text-align: center;
+				}
+
+				.txR {
+					text-align: right;
+					padding-right: 20px !important;
+				}
+
+				.tx12 {
+					font-size: 12px !important;
+				}
+
+				.btn {
+					vertical-align: middle;
+
+					a {
+						box-sizing: border-box;
+						padding: 4px 10px 5px;
+						color: #666;
+						font-size: 12px;
+						border-radius: 4px;
+						border: 1px solid #ccc;
+						box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+						cursor: pointer;
+					}
+				}
+			}
+		}
+
+		.pageNum {
+			width: 100%;
+			margin: 30px 0 20px;
+			text-align: center;
+
+			> ul {
+				font-size: 0;
+
+				> li {
+					box-sizing: border-box;
+					display: inline-block;
+					width: 30px;
+					height: 30px;
+					padding: 8px 0;
+					border-radius: @radius;
+					border: 1px solid #ddd;
+					margin-right: 4px;
+					color: #bbb;
+					font-size: 12px;
+					font-weight: bold;
+					cursor: pointer;
+
+					&:last-child {
+						margin: 0;
+					}
+
+					&:hover, &.active {
+						color: #333;
+						border: 1px solid @M_color;
+						box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+					}
+				}
+			}
+		}
+	}
+}
+
+.footer {
+	clear: both;
+	// box-sizing: border-box;
+	width: 100%;
+	min-width: @containerWidth;
+	// height: @footerHeight;
+	border-top: 1px solid #bbb;
+	padding: 14px 20px 20px;
+	background-color: white;
+
+	h3 {
+		font-size: 12px;
+		color: #999;
+		font-weight: 300;
+		letter-spacing: 0.4px;
+		font-family: 'Roboto';
+	}
+}
+
+/************************************************/
+/************************************************/
+
+.inputField {
+	background-color: white;
+	box-sizing: border-box;
+	// padding: 6px;
+	font-size: 12px;
+	width: 140px;
+}
+
+.selectBox {
+	font-size: 12px;
+	background-color: white;
+}
+
+.num {
+	letter-spacing: 0;
+}
+
+.pdL36 {
+	padding-left: 36px;
+}
+
+

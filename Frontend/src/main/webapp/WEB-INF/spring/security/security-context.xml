@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+	<http pattern="/include/**" security="none"/>
+	<http auto-config="true" use-expressions="true" create-session="never">
+		<intercept-url pattern="/pwChk" access="permitAll"/> <!-- 누구나 사용 가능 -->
+		<intercept-url pattern="/image/**" access="permitAll"/> <!-- 누구나 사용 가능 -->
+		
+		<!-- 관리자 영역 설정 -->
+		<intercept-url pattern="/" access="hasRole('ROLE_ADMIN')"/>  <!-- ADMIN만 가능함. -->
+		<intercept-url pattern="/User_View/*" access="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')"/>  
+		<intercept-url pattern="/auth/**" access="hasRole('ROLE_ADMIN')"/>  <!-- ADMIN만 가능함. -->
+		<intercept-url pattern="/View/**" access="hasRole('ROLE_ADMIN')"/>  <!-- ADMIN만 가능함. -->
+		<intercept-url pattern="/groupBoard/**" access="hasRole('ROLE_ADMIN')"/>  <!-- ADMIN만 가능함. -->
+		<intercept-url pattern="/trackerBoard/**" access="hasRole('ROLE_ADMIN')"/>  <!-- ADMIN만 가능함. -->
+		<intercept-url pattern="/inverterBoard/**" access="hasRole('ROLE_ADMIN')"/>  <!-- ADMIN만 가능함. -->
+		<intercept-url pattern="/userBoard/**" access="hasRole('ROLE_ADMIN')"/>  <!-- ADMIN만 가능함. -->
+		
+		<!--  로그인폼 -->
+		<form-login login-page="/User_auth/Login"
+		login-processing-url="/User_auth/login_check.do"
+		authentication-success-handler-ref="userLoginSuccessHandler" 
+		authentication-failure-handler-ref="userLoginFailureHandler"
+		username-parameter="user_id" password-parameter="user_pw"/> 
+		
+		<session-management>
+			<!-- max-session=1 동시접속 막기 -->
+			<concurrency-control max-sessions="100" expired-url="/User_auth/Login"
+			error-if-maximum-exceeded="true"/>
+		</session-management>
+		<!-- 접근 권한이 없는 경우의 코드 -->
+		<access-denied-handler ref="userDeniedHandler"/>
+	</http>
+	  
+	<beans:bean id="userDeniedHandler" 		 class= "com.example.spring03.service.UserDeniedHandler" />
+	<beans:bean id="userLoginSuccessHandler" class= "com.example.spring03.service.UserLoginSuccessHandler" />
+	<beans:bean id="userLoginFailureHandler" class= "com.example.spring03.service.UserLoginFailureHandler" />
+	
+	<!-- 로그인 인증을 처리하는 빈 -->
+	<beans:bean id="userService" class= "com.example.spring03.service.UserAuthenticationService">
+		<beans:constructor-arg name="sqlSession" 	ref="sqlSession" />
+	</beans:bean>
+	<!-- 비밀번호 암호화를 위한 빈 -->
+	<beans:bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></beans:bean>
+	<beans:bean id="myAuthenticationProvider" class="com.example.spring03.UserDetails.MyAuthenticationProvider"/>
+	
+	<authentication-manager>
+		<authentication-provider ref="myAuthenticationProvider"/>
+	</authentication-manager>
+	
+</beans:beans>

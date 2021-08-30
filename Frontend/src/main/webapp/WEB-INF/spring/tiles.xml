@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+	"-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+	"http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+
+	<definition name="base" template="/WEB-INF/views/layout/layout.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/layout/header.jsp"/>
+		<put-attribute name="contents" value=""/>
+	</definition>
+	
+	<definition name="user_base" template="/WEB-INF/views/layout/user_layout.jsp">
+		<put-attribute name="user_header" value="/WEB-INF/views/layout/user_header.jsp"/>
+		<put-attribute name="user_contents" value=""/>
+	</definition>
+
+	<definition name="tiles/view/detail" extends="base">
+		<put-attribute name="contents" value="/WEB-INF/views/View/Details.jsp" />
+	</definition>
+	<definition name="tiles/view/index" extends="base">
+		<put-attribute name="contents" value="/WEB-INF/views/View/index.jsp" />
+	</definition>
+	
+	<!-- User_board -->
+	<definition name="tiles/user_board/user_board" extends="base">
+		<put-attribute name="contents" value="/WEB-INF/views/userBoard/User_Board.jsp" />
+	</definition>
+	
+	<definition name="tiles/user_board/user_insert" extends="base">
+		<put-attribute name="contents" value="/WEB-INF/views/userBoard/User_Insert.jsp" />
+	</definition>
+	
+	<definition name="tiles/user_board/user_view" extends="base">
+		<put-attribute name="contents" value="/WEB-INF/views/userBoard/User_view.jsp" />
+	</definition>
+	
+	<!-- Group_board -->
+	<definition name="tiles/group_board/group_board" extends="base">
+		<put-attribute name="contents" value="/WEB-INF/views/groupBoard/Group_Board.jsp" />
+	</definition>
+	
+	<definition name="tiles/group_board/group_insert" extends="base">
+		<put-attribute name="contents" value="/WEB-INF/views/groupBoard/Group_Insert.jsp" />
+	</definition>
+	
+	<definition name="tiles/group_board/group_view" extends="base">
+		<put-attribute name="contents" value="/WEB-INF/views/groupBoard/Group_view.jsp" />
+	</definition>
+	
+	<!-- Tracker_board -->
+	<definition name="tiles/tracker_board/tracker_board" extends="base">
+		<put-attribute name="contents" value="/WEB-INF/views/trackerBoard/Tracker_Board.jsp" />
+	</definition>
+	
+	<definition name="tiles/tracker_board/tracker_insert" extends="base">
+		<put-attribute name="contents" value="/WEB-INF/views/trackerBoard/Tracker_Insert.jsp" />
+	</definition>
+	
+	<definition name="tiles/tracker_board/tracker_view" extends="base">
+		<put-attribute name="contents" value="/WEB-INF/views/trackerBoard/Tracker_view.jsp" />
+	</definition>
+	
+	<!-- Tracker_inverterBoard -->
+	<definition name="tiles/inverter_board/inverter_board" extends="base">
+		<put-attribute name="contents" value="/WEB-INF/views/inverterBoard/Inverter_Board.jsp" />
+	</definition>
+	
+	<definition name="tiles/inverter_board/inverter_insert" extends="base">
+		<put-attribute name="contents" value="/WEB-INF/views/inverterBoard/Inverter_insert.jsp" />
+	</definition>
+	
+	<definition name="tiles/inverter_board/inverter_view" extends="base">
+		<put-attribute name="contents" value="/WEB-INF/views/inverterBoard/Inverter_view.jsp" />
+	</definition>
+	
+	<!-- User_Integrated_Monitoring -->
+	<definition name="tiles/User_View/User_index" extends="user_base">
+		<put-attribute name="user_contents" value="/WEB-INF/views/User_View/User_index.jsp" />
+	</definition>
+	
+	<!-- User_groupBoard -->
+	<definition name="tiles/User_groupBoard/Group_Board" extends="user_base">
+		<put-attribute name="user_contents" value="/WEB-INF/views/User_groupBoard/Group_Board.jsp" />
+	</definition>
+	
+	<!-- User_trackerBoard -->
+	<definition name="tiles/User_trackerBoard/Tracker_Board" extends="user_base">
+		<put-attribute name="user_contents" value="/WEB-INF/views/User_trackerBoard/Tracker_Board.jsp" />
+	</definition>
+	
+	<!-- User_inverterBoard -->
+	<definition name="tiles/User_inverterBoard/Inverter_Board" extends="user_base">
+		<put-attribute name="user_contents" value="/WEB-INF/views/User_inverterBoard/Inverter_Board.jsp" />
+	</definition>
+	
+</tiles-definitions>

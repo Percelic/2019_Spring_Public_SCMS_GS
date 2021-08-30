@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
+<mapper namespace="group">
+
+	<select id="groupListCount" resultType="int">
+		select count(*) from t_group
+	</select>
+
+	<select id="select" resultType="com.example.spring03.group.dto.groupDTO">
+		SELECT *
+		FROM
+		    (SELECT    @rn := @rn +1 AS tNum,
+						t_group_id,
+						t_group_name,
+						t_group_addr,
+						t_group_manager,
+						t_group_builder,
+						t_group_username,
+						t_group_phone,
+						t_group_reg_date,
+						tracker_cnt,
+						inverter_cnt
+						
+				
+		    FROM    (
+			    SELECT
+				t_group_id,
+						t_group_name,
+						t_group_addr,
+						t_group_manager,
+						t_group_builder,
+						t_group_username,
+						t_group_phone,
+						t_group_reg_date
+				,(SELECT COUNT(*) FROM t_tracker WHERE t_group_id = t_group.t_group_id) AS 'tracker_cnt'
+				,(SELECT COUNT(*) FROM inverter WHERE t_group_id = t_group.t_group_id) AS 'inverter_cnt'
+				
+			    FROM t_group AS t_group
+			    
+			    ORDER BY t_group_id DESC
+				)sa
+				,(SELECT @rn := 0) R
+		    ) sq
+		    WHERE tNum BETWEEN ${startRow} AND ${endRow}
+	</select>
+	<!-- 군집 상세보기 들어갈 것입니다. -->
+	<select id="group_view"
+		resultType="com.example.spring03.group.dto.groupDTO">
+		select
+		t_group_id,
+		t_group_name,
+		t_group_builder,
+		t_group_owner,
+		t_group_phone,
+		t_group_email,
+		t_group_manager,
+		t_group_username,
+		t_group_ip,
+		t_group_addr,
+		t_group_addr2,
+		history,
+		(SELECT COUNT(*) FROM t_tracker WHERE t_group_id = t_group.t_group_id) AS 'tracker_cnt',
+		(SELECT COUNT(*) FROM inverter WHERE t_group_id = t_group.t_group_id) AS 'inverter_cnt'
+		from t_group as t_group
+		where t_group_id =
+		#{t_group_id}
+	</select>
+
+	<delete id="delete" parameterType="int" statementType="PREPARED">
+		delete
+		from t_group
+		where t_group_id = #{t_group_id}
+	</delete>
+	
+	<!-- 군집 등록을 할 것입니다. -->
+	<insert id="insert" parameterType="com.example.spring03.group.dto.groupDTO">
+insert into t_group(
+		t_group_id,
+		t_group_name,
+		t_group_builder,
+		t_group_owner,
+		t_group_phone,
+		t_group_email,
+		t_group_manager,
+		t_group_username,
+		t_group_ip,
+		t_group_addr,
+		t_group_addr2,
+		history
+		)
+values(
+		#{t_group_id},
+		#{t_group_name}, 
+		#{t_group_builder}, 
+		#{t_group_owner}, 
+		#{t_group_phone},
+		#{t_group_email},
+		#{t_group_manager},
+		#{t_group_username},
+		#{t_group_ip},
+		#{t_group_addr},
+		#{t_group_addr2},
+		#{history}
+				)
+	</insert>
+
+	<update id="update">
+	update t_group
+		set                 
+		t_group_name      = #{t_group_name} ,
+		t_group_builder   = #{t_group_builder} ,
+		t_group_owner     = #{t_group_owner} ,
+		t_group_phone     = #{t_group_phone} ,
+		t_group_email     = #{t_group_email} ,
+		t_group_manager   = #{t_group_manager} ,
+		t_group_username  = #{t_group_username} ,
+		t_group_ip        = #{t_group_ip} ,
+		t_group_addr      = #{t_group_addr} ,
+		t_group_addr2     = #{t_group_addr2} ,
+		history           = #{history}
+		where t_group_id  = #{t_group_id}
+	</update>
+	
+	<select id="IDCheck" resultType="com.example.spring03.group.dto.groupDTO" >
+		select t_group_id  
+		from t_group
+	where t_group_id = #{t_group_id}
+	</select>
+		<select id="inverter_group_choice"
+		resultType="com.example.spring03.group.dto.groupDTO">
+		SELECT tracker_id FROM t_tracker;
+	</select>
+	
+	<!-- 제약조건에 걸릴 시 Fail 되게 만들기 -->
+	<select id="t_group_count" resultType="int">
+	select count(*) from t_group where t_group_id=#{t_group_id}
+	</select>
+	
+	<select id="IdChek" resultType="com.example.spring03.group.dto.groupDTO">
+	select COUNT(*) from t_group
+	where 
+	t_group_id = #{t_group_id}
+	
+	</select>
+	<select id="selectGroupID" parameterType="HashMap" resultType="HashMap">
+		select count(*) as t_group_id 
+		From t_group 
+		where t_group_id = #{t_group_id}
+	</select>
+	<!-- 19.07.09 아이디 중복 검사  | 군집명 중복 검사-->
+	<select id="GroupIDcheck" parameterType="String" resultType="int">
+		select count(*) from t_group
+where t_group_id = #{t_group_id}
+	</select>
+	<select id="GroupNamecheck" parameterType="String" resultType="int">
+	select count(*) from t_group
+where t_group_name = #{t_group_name}
+	</select>
+	
+	<!-- 일반 유저 -->
+		<!-- 일반 유저 -->
+		
+	<select id="User_groupListCount" resultType="int">
+		SELECT COUNT(*) FROM 
+		(SELECT * FROM t_group) as a
+		JOIN 
+		(SELECT * FROM user WHERE user_id = #{userID}) as b
+		ON a.t_group_id = b.group_id 
+	</select>
+	
+	<select id="User_groupListCount_191010" resultType="int">
+		SELECT COUNT(*) FROM 
+		(SELECT * FROM t_group) as a
+		JOIN 
+		(SELECT * FROM user_t_g WHERE user_id = #{userID} LIMIT 1) as b
+		ON a.t_group_id = b.t_group_id 
+	</select>
+		
+	<select id="User_group" resultType="com.example.spring03.group.dto.groupDTO">
+select * from t_group
+where t_group_id = 700;
+	</select>
+	
+	<select id="User_group_190919" resultType="com.example.spring03.group.dto.groupDTO">
+	SELECT a.* FROM 
+	((SELECT * FROM t_group) as a
+	 JOIN 
+	 (SELECT user_id, group_id FROM user WHERE user_id = #{userID}) as b
+	 ON a.t_group_id = b.group_id
+	);
+	</select>
+	
+	<select id="User_group_191010" resultType="com.example.spring03.group.dto.groupDTO">
+	SELECT a.* FROM 
+	((SELECT * FROM t_group) as a
+	 JOIN 
+	 (SELECT user_id, t_group_id FROM user_t_g WHERE user_id = #{userID} LIMIT 1) as b
+	 ON a.t_group_id = b.t_group_id
+	);
+	</select> 
+</mapper>

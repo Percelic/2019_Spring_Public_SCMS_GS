@@ -1,0 +1,68 @@
+@import url('normalize.css');
+
+/* * { */
+/* 	font-family: 'Nanum Gothic'; */
+/* } */
+
+/* html, */
+/* body { */
+/* 	margin: 0; */
+/* 	padding: 0; */
+/* } */
+
+/* .containerMap { */
+/* 	position: relative; */
+/* /* 	margin: 50px auto 30px; */
+* /
+	/* 	width: 300px; */
+	/* 	height: 400px; */
+	/* } */ 
+
+#map {
+	border: 1px solid #ddd;
+}
+
+.background {
+	fill: #f7fcfd;
+	pointer-events: all;
+}
+
+.ui-button-text-only .ui-button-text {
+	padding: .2em .8em;
+	font-size: 12px;
+}
+
+button.ui-button-icon-only {
+	width: 24px;
+}
+
+.ui-button-icon-only .ui-button-text, .ui-button-icons-only .ui-button-text {
+	padding: 0;
+}
+
+#states path {
+	/*   fill: #ccece6; */
+	fill: #D7EFFE;
+	stroke: #fff;
+	stroke-width: 1.5px;
+}
+
+#states path:hover {
+	fill: #7bb1ff;
+	stroke: #fff;
+}
+
+#states .active {
+	/*   fill: orange; */
+	fill: #7bb1ff;
+}
+
+#states path {
+	cursor: pointer;
+}
+
+#states text {
+	cursor: pointer;
+	font-size: 12px;
+}
+
